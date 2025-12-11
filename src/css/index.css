@@ -1,0 +1,49 @@
+@import 'tailwindcss';
+
+@keyframes fade-in {
+    0%{
+        opacity: 0;
+        translate: -30px;
+    }
+    100%{
+        opacity: 1;
+        translate: 0px;
+    }
+}
+.fade-in{
+    animation: fade-in 0.5s ease-in-out 1;
+}
+@keyframes fade-out {
+    0%{
+        opacity: 0;
+        translate: 50px;
+    }
+    100%{
+        opacity: 1;
+        translate: 0px;
+    }
+}
+.fade-out{
+    animation: fade-out 0.7s ease-in-out 1;
+}
+@keyframes rotate {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(-360deg);
+    }
+}
+
+.animation-rot{
+    animation: rotate 1s linear infinite;
+}
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade {
+  animation: fadein 0.4s ease-in-out;
+}
