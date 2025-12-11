@@ -1,0 +1,268 @@
+{
+  "users": [
+    {
+      "id": "aa6e",
+      "mobile": "1234567890",
+      "firstName": "akash",
+      "lastName": "dhoma",
+      "dob": "2001-02-01",
+      "adhaar": "123453457528",
+      "refMobile": "9505803003",
+      "refName": "ganesh",
+      "isVerified": true
+    },
+    {
+      "id": "fce4",
+      "mobile": "9345739457",
+      "firstName": "ramu",
+      "lastName": "prasad",
+      "dob": "2001-03-05",
+      "adhaar": "475628635893",
+      "refMobile": "8476835763",
+      "refName": "Admin",
+      "isVerified": true
+    },
+    {
+      "id": "aa6e",
+      "mobile": "1234567890",
+      "firstName": "akash",
+      "lastName": "dhoma",
+      "dob": "2001-02-01",
+      "adhaar": "123453457528",
+      "refMobile": "9505803003",
+      "refName": "ganesh",
+      "isVerified": true
+    },
+    {
+      "id": "fce4",
+      "mobile": "9345739457",
+      "firstName": "ramu",
+      "lastName": "prasad",
+      "dob": "2001-03-05",
+      "adhaar": "475628635893",
+      "refMobile": "8476835763",
+      "refName": "Admin",
+      "isVerified": true
+    },
+    {
+      "id": "aa6e",
+      "mobile": "1234567890",
+      "firstName": "akash",
+      "lastName": "dhoma",
+      "dob": "2001-02-01",
+      "adhaar": "123453457528",
+      "refMobile": "9505803003",
+      "refName": "ganesh",
+      "isVerified": true
+    },
+    {
+      "id": "fce4",
+      "mobile": "9345739457",
+      "firstName": "ramu",
+      "lastName": "prasad",
+      "dob": "2001-03-05",
+      "adhaar": "475628635893",
+      "refMobile": "8476835763",
+      "refName": "Admin",
+      "isVerified": true
+    },
+    {
+      "id": "aa6e",
+      "mobile": "1234567890",
+      "firstName": "akash",
+      "lastName": "dhoma",
+      "dob": "2001-02-01",
+      "adhaar": "123453457528",
+      "refMobile": "9505803003",
+      "refName": "ganesh",
+      "isVerified": true
+    },
+    {
+      "id": "fce4",
+      "mobile": "9345739457",
+      "firstName": "ramu",
+      "lastName": "prasad",
+      "dob": "2001-03-05",
+      "adhaar": "475628635893",
+      "refMobile": "8476835763",
+      "refName": "Admin",
+      "isVerified": true
+    },
+    {
+      "id": "aa6e",
+      "mobile": "1234567890",
+      "firstName": "akash",
+      "lastName": "dhoma",
+      "dob": "2001-02-01",
+      "adhaar": "123453457528",
+      "refMobile": "9505803003",
+      "refName": "ganesh",
+      "isVerified": true
+    },
+    {
+      "id": "fce4",
+      "mobile": "9345739457",
+      "firstName": "ramu",
+      "lastName": "prasad",
+      "dob": "2001-03-05",
+      "adhaar": "475628635893",
+      "refMobile": "8476835763",
+      "refName": "Admin",
+      "isVerified": true
+    },
+    {
+      "id": "aa6e",
+      "mobile": "1234567890",
+      "firstName": "akash",
+      "lastName": "dhoma",
+      "dob": "2001-02-01",
+      "adhaar": "123453457528",
+      "refMobile": "9505803003",
+      "refName": "ganesh",
+      "isVerified": true
+    },
+    {
+      "id": "fce4",
+      "mobile": "9345739457",
+      "firstName": "ramu",
+      "lastName": "prasad",
+      "dob": "2001-03-05",
+      "adhaar": "475628635893",
+      "refMobile": "8476835763",
+      "refName": "Admin",
+      "isVerified": true
+    },
+    {
+      "id": "aa6e",
+      "mobile": "1234567890",
+      "firstName": "akash",
+      "lastName": "dhoma",
+      "dob": "2001-02-01",
+      "adhaar": "123453457528",
+      "refMobile": "9505803003",
+      "refName": "ganesh",
+      "isVerified": true
+    },
+    {
+      "id": "fce4",
+      "mobile": "9345739457",
+      "firstName": "ramu",
+      "lastName": "prasad",
+      "dob": "2001-03-05",
+      "adhaar": "475628635893",
+      "refMobile": "8476835763",
+      "refName": "Admin",
+      "isVerified": true
+    },
+    {
+      "id": "aa6e",
+      "mobile": "1234567890",
+      "firstName": "akash",
+      "lastName": "dhoma",
+      "dob": "2001-02-01",
+      "adhaar": "123453457528",
+      "refMobile": "9505803003",
+      "refName": "ganesh",
+      "isVerified": true
+    },
+    {
+      "id": "fce4",
+      "mobile": "9345739457",
+      "firstName": "ramu",
+      "lastName": "prasad",
+      "dob": "2001-03-05",
+      "adhaar": "475628635893",
+      "refMobile": "8476835763",
+      "refName": "Admin",
+      "isVerified": true
+    },
+    {
+      "id": "aa6e",
+      "mobile": "1234567890",
+      "firstName": "akash",
+      "lastName": "dhoma",
+      "dob": "2001-02-01",
+      "adhaar": "123453457528",
+      "refMobile": "9505803003",
+      "refName": "ganesh",
+      "isVerified": true
+    },
+    {
+      "id": "fce4",
+      "mobile": "9345739457",
+      "firstName": "ramu",
+      "lastName": "prasad",
+      "dob": "2001-03-05",
+      "adhaar": "475628635893",
+      "refMobile": "8476835763",
+      "refName": "Admin",
+      "isVerified": true
+    },
+    {
+      "id": "aa6e",
+      "mobile": "1234567890",
+      "firstName": "akash",
+      "lastName": "dhoma",
+      "dob": "2001-02-01",
+      "adhaar": "123453457528",
+      "refMobile": "9505803003",
+      "refName": "ganesh",
+      "isVerified": true
+    },
+    {
+      "id": "fce4",
+      "mobile": "9345739457",
+      "firstName": "ramu",
+      "lastName": "prasad",
+      "dob": "2001-03-05",
+      "adhaar": "475628635893",
+      "refMobile": "8476835763",
+      "refName": "Admin",
+      "isVerified": true
+    },
+    {
+      "id": "aa6e",
+      "mobile": "1234567890",
+      "firstName": "akash",
+      "lastName": "dhoma",
+      "dob": "2001-02-01",
+      "adhaar": "123453457528",
+      "refMobile": "9505803003",
+      "refName": "ganesh",
+      "isVerified": true
+    },
+    {
+      "id": "fce4",
+      "mobile": "9345739457",
+      "firstName": "ramu",
+      "lastName": "prasad",
+      "dob": "2001-03-05",
+      "adhaar": "475628635893",
+      "refMobile": "8476835763",
+      "refName": "Admin",
+      "isVerified": true
+    },
+    {
+      "id": "aa6e",
+      "mobile": "1234567890",
+      "firstName": "akash",
+      "lastName": "dhoma",
+      "dob": "2001-02-01",
+      "adhaar": "123453457528",
+      "refMobile": "9505803003",
+      "refName": "ganesh",
+      "isVerified": true
+    },
+    {
+      "id": "fce4",
+      "mobile": "9345739457",
+      "firstName": "ramu",
+      "lastName": "prasad",
+      "dob": "2001-03-05",
+      "adhaar": "475628635893",
+      "refMobile": "8476835763",
+      "refName": "Admin",
+      "isVerified": true
+    }
+  ]
+}

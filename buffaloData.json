@@ -1,0 +1,15 @@
+{
+  "buffaloDetails": [
+    {
+      "id": "A-001",
+      "name": "a",
+      "price": 242,
+      "description": "dfsdkfewhu",
+      "age": "2",
+      "location": "vdfgd",
+      "inStock": true,
+      "insurance": 13000,
+      "images": ["data:image/png;base64,..."]
+    }
+  ]
+}
