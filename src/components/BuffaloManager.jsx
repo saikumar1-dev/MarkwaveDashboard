@@ -3,19 +3,15 @@ import React, { useEffect, useRef, useState } from "react";
 /**
  * BuffaloManager.jsx
  *
- * - Tries API at API_BASE.
- * - If API reachable (GET succeeds), uses API for CRUD (images included in payload).
- * - If API unreachable, falls back to public/buffaloData.json and runs fully client-side.
- * - In fallback mode data persists to localStorage under FALLBACK_STORAGE.
- *
- * Notes:
- * - images are stored as data URLs (base64) inside each buffalo object's `images` array.
- * - insurance is always set to DEFAULT_INSURANCE.
+ * Behavior:
+ * - Try API at API_BASE (GET). If successful, use API for CRUD.
+ * - If API unreachable, fallback to public/buffaloData.json (expects object with "buffaloDetails" array).
+ * - No localStorage usage (per your request) — fallback mode is memory-only.
+ * - Images are stored as data URLs in each buffalo object's `images` array.
  */
 
-const API_BASE = "http://localhost:3001/buffaloDetails"; // adjust as needed
-const FALLBACK_JSON = "/buffaloData.json"; // public folder fallback
-const FALLBACK_STORAGE = "buffalo_fallback_v1";
+const API_BASE = "http://localhost:3001/buffaloDetails";
+const FALLBACK_JSON = `${import.meta?.env?.BASE_URL ?? "/"}buffaloData.json`; // works with Vite/CRA
 const DEFAULT_INSURANCE = 13000;
 const DESC_MAX = 250;
 
@@ -45,63 +41,45 @@ export default function BuffaloManager() {
   const [toDeleteId, setToDeleteId] = useState(null);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  /* -------------------- initialization -------------------- */
   useEffect(() => {
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Initialization: attempt API, else fallback to public JSON
   const init = async () => {
     setLoading(true);
     setError(null);
 
-    // first check API availability by doing a GET
     try {
+      // Try API
       const res = await fetch(API_BASE, { method: "GET" });
       if (!res.ok) throw new Error(`API GET failed ${res.status}`);
       const data = await res.json();
-      // ensure array
       const arr = Array.isArray(data) ? data : [];
-      // ensure each buffalo has images array
       const normalized = arr.map((b) => ({ ...b, images: Array.isArray(b.images) ? b.images : [] }));
       setBuffalos(normalized);
       setApiAvailable(true);
-      // clear any fallback localStorage? we leave it alone
     } catch (apiErr) {
-      // API unreachable -> fallback to public/buffaloData.json and localStorage
+      // API failed -> fallback
+      console.warn("API failed, loading fallback JSON...", apiErr);
       try {
-        const stored = localStorage.getItem(FALLBACK_STORAGE);
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          setBuffalos(Array.isArray(parsed) ? parsed : []);
-        } else {
-          const res2 = await fetch(FALLBACK_JSON);
-          if (!res2.ok) throw new Error(`Fallback json load failed ${res2.status}`);
-          const j = await res2.json();
-          const normalized = Array.isArray(j) ? j.map((b) => ({ ...b, images: Array.isArray(b.images) ? b.images : [] })) : [];
-          setBuffalos(normalized);
-          localStorage.setItem(FALLBACK_STORAGE, JSON.stringify(normalized));
-        }
-      } catch (fbErr) {
-        console.error("Fallback load failed", fbErr);
-        setError("Failed to load data from API and fallback JSON.");
-      } finally {
-        setApiAvailable(false);
-      }
+  const res = await fetch('/MarkwaveDashboard/buffaloData.json');
+  if (!res.ok) throw new Error("Fallback JSON not found: " + res.status);
+
+  const json = await res.json();
+  setBuffalos(json.buffaloDetails || []);
+  setApiAvailable(false);
+} catch (err) {
+  console.error("Fallback JSON load failed", err);
+  setError("No API and no local buffaloData.json found.");
+}
     } finally {
       setLoading(false);
     }
   };
 
   /* -------------------- helpers -------------------- */
-  const persistFallback = (next) => {
-    try {
-      localStorage.setItem(FALLBACK_STORAGE, JSON.stringify(next));
-    } catch (e) {
-      console.error("persist fallback failed", e);
-    }
-  };
-
   const prefixFromName = (name) => {
     if (!name) return "ITEM";
     const first = String(name).trim().split(/\s+/)[0] || name;
@@ -241,7 +219,6 @@ export default function BuffaloManager() {
     if (!validate()) return;
 
     const payloadBase = {
-      // id assigned later for create
       name: form.name.trim(),
       price: Number(form.price),
       description: form.description || "",
@@ -258,32 +235,31 @@ export default function BuffaloManager() {
         if (editingId) {
           const payload = { id: editingId, ...payloadBase };
           const updated = await updateBuffaloApi(editingId, payload);
-          // reflect server response (server should return updated object)
-          setBuffalos((prev) => prev.map((b) => (b.id === updated.id ? { ...updated, images: payloadBase.images } : b)));
+          // server might not include images, ensure client shows images we uploaded
+          setBuffalos((prev) =>
+            prev.map((b) =>
+              b.id === updated.id ? { ...updated, images: payloadBase.images } : b
+            )
+          );
         } else {
-          // generate id client-side to send to server (server may override but we'll follow this)
           const prefix = prefixFromName(form.name);
           const id = nextIdForPrefix(prefix);
           const payload = { id, ...payloadBase };
           const created = await createBuffaloApi(payload);
-          // ensure images exist in client state
           const createdWithImages = { ...created, images: payloadBase.images };
           setBuffalos((prev) => [...prev, createdWithImages]);
         }
       } else {
-        // Fallback mode -> purely local state + persist
+        // Fallback mode -> in-memory only
         if (editingId) {
           const updated = { id: editingId, ...payloadBase };
           const next = (buffalos || []).map((b) => (b.id === editingId ? updated : b));
           setBuffalos(next);
-          persistFallback(next);
         } else {
           const prefix = prefixFromName(form.name);
           const id = nextIdForPrefix(prefix);
           const created = { id, ...payloadBase };
-          const next = [...(buffalos || []), created];
-          setBuffalos(next);
-          persistFallback(next);
+          setBuffalos((prev) => [...(prev || []), created]);
         }
       }
 
@@ -291,7 +267,7 @@ export default function BuffaloManager() {
       setIsPanelOpen(false);
     } catch (err) {
       console.error(err);
-      setError(apiAvailable ? "Failed to save to server." : "Failed to save locally.");
+      setError(apiAvailable ? "Failed to save to server." : "Failed to save locally (in memory).");
     }
   };
 
@@ -309,9 +285,7 @@ export default function BuffaloManager() {
         await deleteBuffaloApi(toDeleteId);
         setBuffalos((prev) => prev.filter((b) => b.id !== toDeleteId));
       } else {
-        const next = (buffalos || []).filter((b) => b.id !== toDeleteId);
-        setBuffalos(next);
-        persistFallback(next);
+        setBuffalos((prev) => (prev || []).filter((b) => b.id !== toDeleteId));
       }
       setIsDeleteOpen(false);
       setToDeleteId(null);
@@ -338,9 +312,9 @@ export default function BuffaloManager() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl font-semibold text-blue-800 mb-2">Buffalo Manager</h1>
-            <div className="text-sm text-slate-600">
-              {loading ? "Initializing..." : apiAvailable ? "Connected to API" : "Fallback mode (local JSON / localStorage)"}
-            </div>
+            {/* <div className="text-sm text-slate-600">
+              {loading ? "Initializing..." : apiAvailable ? "Connected to API" : "Fallback mode (local JSON - memory only)"}
+            </div> */}
           </div>
 
           <div className="flex items-center gap-3">
@@ -504,8 +478,10 @@ export default function BuffaloManager() {
 }
 
 /* ---------------------------
-   BuffaloCard
+   BuffaloCard and CarouselLarge
+   (unchanged, keep as-is)
    --------------------------- */
+
 function BuffaloCard({ item, images = [], onEdit, onDelete, formatNumber }) {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden w-[340px] mx-auto mb-5">
@@ -550,9 +526,6 @@ function BuffaloCard({ item, images = [], onEdit, onDelete, formatNumber }) {
   );
 }
 
-/* ---------------------------
-   CarouselLarge
-   --------------------------- */
 function CarouselLarge({ images }) {
   const [index, setIndex] = useState(0);
   const [hover, setHover] = useState(false);
@@ -576,7 +549,6 @@ function CarouselLarge({ images }) {
     <div className="relative w-full bg-slate-100">
       <div className="w-full h-56 overflow-hidden rounded-t-lg" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
         {images && images.length > 0 ? (
-          // images are data URLs already
           <img src={images[index]} alt={`img-${index}`} className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-slate-400">No image</div>
@@ -585,12 +557,8 @@ function CarouselLarge({ images }) {
 
       {images && images.length > 1 && (
         <>
-          <button onClick={prev} className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/30 text-white w-8 h-8 rounded-full flex items-center justify-center">
-            ‹
-          </button>
-          <button onClick={next} className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/30 text-white w-8 h-8 rounded-full flex items-center justify-center">
-            ›
-          </button>
+          <button onClick={prev} className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/30 text-white w-8 h-8 rounded-full flex items-center justify-center">‹</button>
+          <button onClick={next} className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/30 text-white w-8 h-8 rounded-full flex items-center justify-center">›</button>
 
           <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
             {images.map((_, i) => (
