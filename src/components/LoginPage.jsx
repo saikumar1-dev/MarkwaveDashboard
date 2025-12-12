@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import logo from '../../public/markwave logo.jpg'
 
 const LoginPage = ({ isLogin, setIsLogin }) => {
   const login = {
@@ -59,7 +60,7 @@ const LoginPage = ({ isLogin, setIsLogin }) => {
         <div className=" px-10 py-10 mt-30 shadow-xl h-fit rounded-2xl w-[400px] z-10 bg-gray-100 " style={{boxShadow:'2px 2px 5px black'}}>
           <div className="flex wrap-normal flex-col justify-center items-center">
             <img
-              src="../../public/markwave logo.jpg"
+              src={logo}
               alt="logo"
               className="h-20 w-20 rounded-full "
             />

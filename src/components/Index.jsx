@@ -59,7 +59,9 @@ const Index = () => {
     }
   };
 
-  
+  useEffect(
+    ()=>{refreshUsers()},[apiStatus]
+  )
   const verifyApi = async () => {
     try {
       const res = await fetch("http://localhost:3001/users");
@@ -100,8 +102,9 @@ const Index = () => {
 
   const handleDelete = async (e) => {
     const id = e.target.id;
-    // if (!window.confirm("Are you sure you want to delete this user?")) return;
-
+if(apiStatus!='API Connected'){
+  setUsers(users.filter(u=>u.id!=id))
+} else{
     try {
       const res = await fetch(`http://localhost:3001/users/${id}`, {
         method: "DELETE"
@@ -112,6 +115,7 @@ const Index = () => {
     } catch {
       // alert("API offline. Cannot delete user.");
     }
+  }
   };
 
   // -------------------------------------------------------------------
@@ -163,6 +167,7 @@ const Index = () => {
                     setAddUser={setAddUser}
                     handleDelete={handleDelete}
                     onRefresh={refreshUsers}
+                    setUsers={setUsers}
                   />
               </div>
             </div>
@@ -214,6 +219,8 @@ const Index = () => {
                 form={form}
                 setForm={setForm}
                 updateUser={updateUser}
+                users={users}
+                setUsers={setUsers}
               />
             </div>
           )}

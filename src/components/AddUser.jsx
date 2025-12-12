@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const AddUser = ({setAddUser,addReferral,apiStatus,verifyApi,form,setForm,updateUser}) => {
+const AddUser = ({setAddUser,addReferral,apiStatus,verifyApi,form,setForm,updateUser,users,setUsers}) => {
 
   const [errors, setErrors] = useState({});
 const duplicate={
@@ -13,7 +13,7 @@ const duplicate={
     refName:"",
     isVerified:false
   }
-  
+  // console.log(form);
   const handleChange = (e)=>{
     setForm({...form, [e.target.name]: e.target.value});
     setErrors({...errors, [e.target.name]:""});
@@ -72,17 +72,28 @@ const duplicate={
     setErrors(validationErrors);
     if(Object.keys(validationErrors).length>0) return;
     verifyApi();
-    // if (apiStatus!='API Connected') {
-    // alert("API Not Connected. Please check.");
-    // return;
-  // } 
+   if (apiStatus!='API Connected') {
+   addOffline();
+   } 
+   else{
     if(form.id)
       updateUser(form)
     else
     addReferral(form);
+   }
     setAddUser(false)
     setForm(duplicate);
+
   };
+
+  const addOffline=(e)=>{
+    if(form.id){
+        setUsers([form,...users.filter((u)=>u.id!=form.id)])
+    }
+    else{
+      setUsers([form,...users])
+    }
+  }
 
   const fieldClass = (key)=>(
     `block rounded p-1 w-full border ${errors[key] ? "border-red-500" : "border-gray-400"}`

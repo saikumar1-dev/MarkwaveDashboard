@@ -6,7 +6,8 @@ export default function UsersTable({
   setAddUser,
   handleDelete,
   onRefresh,
-  apiStatus
+  apiStatus,
+  setUsers
 }) {
   const [search, setSearch] = useState("");
   const [sortField, setSortField] = useState(null);
@@ -37,6 +38,7 @@ export default function UsersTable({
   const editUser = (e) => {
     setAddUser(true);
     setForm(users[e.target.id]);
+    
   };
 
   // ----------------------------
