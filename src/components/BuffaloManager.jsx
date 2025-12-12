@@ -11,11 +11,11 @@ import React, { useEffect, useRef, useState } from "react";
  */
 
 const API_BASE = "http://localhost:3001/buffaloDetails";
-const FALLBACK_JSON = `${import.meta?.env?.BASE_URL ?? "/"}buffaloData.json`; // works with Vite/CRA
+// const FALLBACK_JSON = `${import.meta?.env?.BASE_URL ?? "/"}buffaloData.json`; // works with Vite/CRA
 const DEFAULT_INSURANCE = 13000;
 const DESC_MAX = 250;
 
-export default function BuffaloManager() {
+export default function BuffaloManager({apiStatus}) {
   const [buffalos, setBuffalos] = useState([]); // canonical list used in UI
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -43,8 +43,9 @@ export default function BuffaloManager() {
 
   useEffect(() => {
     init();
+    console.log('first')
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [apiStatus]);
 
   // Initialization: attempt API, else fallback to public JSON
   const init = async () => {
@@ -64,7 +65,7 @@ export default function BuffaloManager() {
       // API failed -> fallback
       console.warn("API failed, loading fallback JSON...", apiErr);
       try {
-  const res = await fetch('/MarkwaveDashboard/buffaloData.json');
+  const res = await fetch(`${import.meta.env.BASE_URL}/buffaloData.json`);
   if (!res.ok) throw new Error("Fallback JSON not found: " + res.status);
 
   const json = await res.json();
@@ -484,7 +485,7 @@ export default function BuffaloManager() {
 
 function BuffaloCard({ item, images = [], onEdit, onDelete, formatNumber }) {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden w-[340px] mx-auto mb-5">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden w-[340px] mx-auto mb-5 gap-5">
       <CarouselLarge images={images} />
 
       <div className="p-4">

@@ -72,10 +72,10 @@ const duplicate={
     setErrors(validationErrors);
     if(Object.keys(validationErrors).length>0) return;
     verifyApi();
-    if (apiStatus!='API Connected') {
-    alert("API Not Connected. Please check.");
-    return;
-  } 
+    // if (apiStatus!='API Connected') {
+    // alert("API Not Connected. Please check.");
+    // return;
+  // } 
     if(form.id)
       updateUser(form)
     else

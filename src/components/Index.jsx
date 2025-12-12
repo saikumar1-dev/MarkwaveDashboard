@@ -16,6 +16,8 @@ const Index = () => {
   const [apiStatus, setApiStatus] = useState('API not connected');
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
+  const fallbackURL = `${import.meta.env.BASE_URL}/usersData.json`;
+  // console.log(`${import.meta.env.BASE_URL}/usersData.json`);
   const [form, setForm] = useState({
     mobile: "",
     firstName: "",
@@ -27,9 +29,6 @@ const Index = () => {
     isVerified: false
   });
 
-  // -------------------------------------------------------------------
-  // API + FALLBACK LOADER
-  // -------------------------------------------------------------------
   const refreshUsers = async () => {
     try {
       const res = await fetch("http://localhost:3001/users");
@@ -44,7 +43,7 @@ const Index = () => {
 
       // FALLBACK to public/usersData.json
       try {
-        const fallbackURL = "MarkwaveDashboard/usersData.json";
+       
         console.log("Loading fallback JSON from:", fallbackURL);
 
         const res = await fetch(fallbackURL);
@@ -55,7 +54,7 @@ const Index = () => {
         setApiStatus("Using Local JSON");
       } catch (fallbackErr) {
         console.error("Fallback JSON load failed:", fallbackErr);
-        setApiStatus("No API / No Local JSON");
+        // setApiStatus("No API / No Local JSON");
       }
     }
   };
@@ -173,7 +172,12 @@ const Index = () => {
           {isLogin && btnState === "verified" && (
             <div className="fixed top-49 md:top-35 left-0 w-screen h-screen flex justify-center items-start">
               <div className="w-fit md:h-[80vh] h-[70vh] overflow-y-auto">
-                <VerifiedUsers />
+                <VerifiedUsers 
+                fallbackURL={fallbackURL}
+                refreshUsers={refreshUsers}
+                users={users}
+                setUsers={setUsers}
+                />
               </div>
             </div>
           )}
@@ -182,7 +186,10 @@ const Index = () => {
           {isLogin && btnState === "products" && (
             <div className="fixed top-49 md:top-35 left-0 w-screen h-screen flex justify-center items-start">
               <div className="w-full md:h-[80vh] h-[70vh] overflow-y-auto">
-                <BuffaloManager apiStatus={apiStatus} verifyApi={verifyApi} />
+                <BuffaloManager 
+                apiStatus={apiStatus} 
+                verifyApi={verifyApi} 
+                />
               </div>
             </div>
           )}

@@ -1,48 +1,49 @@
 import { useEffect, useState, useMemo } from "react";
 
-const VerifiedUsers = () => {
-  const [users, setUsers] = useState([]);
-  const [apiStatus, setApiStatus] = useState("Checking...");
+const VerifiedUsers = ({fallbackURL,refreshUsers,users,setUsers}) => {
+  // const [users, setUsers] = useState([]);
+  // const [apiStatus, setApiStatus] = useState("Checking...");
   const [search, setSearch] = useState("");
   const [sortField, setSortField] = useState(null);
   const [sortAsc, setSortAsc] = useState(true);
-
+  let data1=[];
   // --------------------------------------------------
   // Fetch API + Fallback Logic
   // --------------------------------------------------
-  const loadUsers = async () => {
-    try {
-      const res = await fetch("http://localhost:3001/users");
-      if (!res.ok) throw new Error("API failed");
+  // const loadUsers = async () => {
+  //   try {
+  //     const res = await fetch("http://localhost:3001/users");
+  //     if (!res.ok) throw new Error("API failed");
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      // Filter verified users
-      setUsers(data.filter((u) => u.isVerified === true));
-      setApiStatus("API Connected");
-    } catch (err) {
-      console.warn("API failed. Loading fallback usersData.json");
+  //     // Filter verified users
+  //     setUsers(data.filter((u) => u.isVerified === true));
+  //     setApiStatus("API Connected");
+  //   } catch (err) {
+  //     console.warn("API failed. Loading fallback usersData.json");
 
-      try {
-        const res2 = await fetch("MarkwaveDashboard/usersData.json");
-        if (!res2.ok) throw new Error("Fallback missing");
+  //     try {
+  //       const res2 = await fetch(fallbackURL);
+  //       if (!res2.ok) throw new Error("Fallback missing");
 
-        const json = await res2.json();
-        const verified = (json.users || []).filter((u) => u.isVerified === true);
+  //       const json = await res2.json();
+  //       const verified = (json.users || []).filter((u) => u.isVerified === true);
 
-        setUsers(verified);
-        setApiStatus("Using Local JSON");
-      } catch (e) {
-        console.error("Fallback failed:", e);
-        setApiStatus("No API / No JSON");
-        setUsers([]);
-      }
-    }
-  };
+  //       setUsers(verified);
+  //       setApiStatus("Using Local JSON");
+  //     } catch (e) {
+  //       console.error("Fallback failed:", e);
+  //       setApiStatus("No API / No JSON");
+  //       setUsers([]);
+  //     }
+  //   }
+  // };
 
-  useEffect(() => {
-    loadUsers();
-  }, []);
+  //  useEffect(() => {
+  //   data1=users.filter((u) => u.isVerified === true);
+  //   console.log('data1'+data1)
+  //  }, []);
 
   // --------------------------------------------------
   // Sorting Logic
@@ -59,17 +60,19 @@ const VerifiedUsers = () => {
   // Search + Sort Computation
   // --------------------------------------------------
   const filteredUsers = useMemo(() => {
-    let data = [...users];
-
+    let data = users.filter((u) => u.isVerified === true);
+// console.log('data'+data)
     if (search.trim() !== "") {
-      const s = search.toLowerCase();
-      data = data.filter(
-        (u) =>
-          u.firstName.toLowerCase().includes(s) ||
-          u.lastName.toLowerCase().includes(s) ||
-          u.mobile.includes(s)
-      );
-    }
+  const s = search.toLowerCase();
+  data = data.filter((u) => {
+    const fn = (u.firstName || "").toLowerCase();
+    const ln = (u.lastName || "").toLowerCase();
+    const mb = (u.mobile || "");
+
+    return fn.includes(s) || ln.includes(s) || mb.includes(s);
+  });
+}
+
 
     if (sortField) {
       data.sort((a, b) => {
@@ -108,7 +111,7 @@ const VerifiedUsers = () => {
             className="px-3 py-1 bg-green-700 text-white text-sm rounded"
             onClick={() => {
               setSearch("");
-              loadUsers();
+              refreshUsers();
             }}
           >
             Refresh
