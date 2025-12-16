@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from "react";
  * - Images are stored as data URLs in each buffalo object's `images` array.
  */
 
-const API_BASE = "http://localhost:3001/buffaloDetails";
+const API_BASE = "https://markwavedb.onrender.com/buffaloDetails";
 // const FALLBACK_JSON = `${import.meta?.env?.BASE_URL ?? "/"}buffaloData.json`; // works with Vite/CRA
 const DEFAULT_INSURANCE = 13000;
 const DESC_MAX = 250;

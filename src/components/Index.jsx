@@ -9,7 +9,7 @@ import BuffaloTree from './BuffaloTree';
 import Logout from './Logout';
 
 const Index = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
   const [addUser, setAddUser] = useState(false);
   const [users, setUsers] = useState([]);
   const [btnState, setBtnState] = useState('referred');
@@ -17,6 +17,7 @@ const Index = () => {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const fallbackURL = `${import.meta.env.BASE_URL}/usersData.json`;
+  const apiUrl='https://markwavedb.onrender.com/';
   // console.log(`${import.meta.env.BASE_URL}/usersData.json`);
   const [form, setForm] = useState({
     mobile: "",
@@ -31,7 +32,7 @@ const Index = () => {
 
   const refreshUsers = async () => {
     try {
-      const res = await fetch("http://localhost:3001/users");
+      const res = await fetch(apiUrl+"users");
       if (!res.ok) throw new Error("API error");
 
       const data = await res.json();
@@ -44,7 +45,7 @@ const Index = () => {
       // FALLBACK to public/usersData.json
       try {
        
-        console.log("Loading fallback JSON from:", fallbackURL);
+        // console.log("Loading fallback JSON from:", fallbackURL);
 
         const res = await fetch(fallbackURL);
         if (!res.ok) throw new Error("Fallback JSON missing: " + res.status);
@@ -64,7 +65,7 @@ const Index = () => {
   )
   const verifyApi = async () => {
     try {
-      const res = await fetch("http://localhost:3001/users");
+      const res = await fetch(apiUrl+"users");
       setApiStatus(res.ok ? "API Connected" : "API responded but failed");
     } catch {
       setApiStatus("API not reachable");
@@ -74,7 +75,7 @@ const Index = () => {
  
   const addReferral = async (userData) => {
     try {
-      const res = await fetch("http://localhost:3001/users", {
+      const res = await fetch(apiUrl+"users", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(userData)
@@ -89,7 +90,7 @@ const Index = () => {
 
   const updateUser = async (data) => {
     try {
-      await fetch(`http://localhost:3001/users/${form.id}`, {
+      await fetch(`${apiUrl}users/${form.id}`, {
         method: "PUT",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(data)
@@ -106,7 +107,7 @@ if(apiStatus!='API Connected'){
   setUsers(users.filter(u=>u.id!=id))
 } else{
     try {
-      const res = await fetch(`http://localhost:3001/users/${id}`, {
+      const res = await fetch(`${apiUrl}users/${id}`, {
         method: "DELETE"
       });
 
@@ -194,6 +195,7 @@ if(apiStatus!='API Connected'){
                 <BuffaloManager 
                 apiStatus={apiStatus} 
                 verifyApi={verifyApi} 
+                apiUrl={apiUrl}
                 />
               </div>
             </div>
